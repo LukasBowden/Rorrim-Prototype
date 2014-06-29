@@ -1,0 +1,9 @@
+
+
+Mirrors
+	Check rotation of mirror
+	Check direction of line
+		If(Line and Mirror line up)
+			Create another line based on rot of mirror and dir of line
+			
+			
