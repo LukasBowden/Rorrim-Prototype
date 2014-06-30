@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class Line : MonoBehaviour 
 {
 	private LayerMask layerMirror = (1 << 8);
@@ -93,6 +94,8 @@ public class Line : MonoBehaviour
 			if(Input.GetMouseButtonDown(1))
 			{
 				transform.parent.position = new Vector2( linePosList[linePosList.Count - 1].x, linePosList[linePosList.Count - 1].y );
+
+
 			}
 		}
 	}
