@@ -4,7 +4,7 @@ using System.Collections;
 public class Mirror : MonoBehaviour 
 {
 	private LayerMask layerMirror = (1 << 8);
-	private LayerMask layerMirrorIgnore = ~(1 << 8);
+	private LayerMask layerIgnore = ~((1 << 8) | (1 << 9) | (1 << 10) | (1 << 11));
 	private Vector3 dir;
 	private RaycastHit2D hit;
 //	private normRot;
@@ -45,7 +45,7 @@ public class Mirror : MonoBehaviour
 		}
 		else
 		{
-			hit = Physics2D.Raycast(hitPoint + dir * 0.01f, dir, Mathf.Infinity, layerMirrorIgnore);
+			hit = Physics2D.Raycast(hitPoint + dir * 0.01f, dir, Mathf.Infinity, layerIgnore);
 			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index, hit.point);
 			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().clearElse(index);
 		}

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Line : MonoBehaviour 
 {
 	private LayerMask layerMirror = (1 << 8);
-	private LayerMask layerIgnore = ~((1 << 8) | (1 << 9));
+	private LayerMask layerIgnore = ~((1 << 8) | (1 << 9) | (1 << 10) | (1 << 11));
 	
 	private Vector2 mouseDirection;
 	private LineRenderer line;
@@ -43,7 +43,7 @@ public class Line : MonoBehaviour
 			mouseDirection = Camera.main.ScreenToWorldPoint( Input.mousePosition) - transform.position;
 			mouseDirection.Normalize();
 
-			RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDirection, 100.0f, layerMirror);
+			RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDirection, Mathf.Infinity, layerMirror);
 			if(hit.collider)
 			{
 				linePosList[1] = hit.point;
@@ -61,7 +61,7 @@ public class Line : MonoBehaviour
 			}
 			else
 			{
-				hit = Physics2D.Raycast(transform.position, mouseDirection, 100.0f, layerIgnore);
+				hit = Physics2D.Raycast(transform.position, mouseDirection, Mathf.Infinity, layerIgnore);
 				if(hit.collider)
 				{
 					linePosList.Clear();
