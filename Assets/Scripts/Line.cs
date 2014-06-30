@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Line : MonoBehaviour 
 {
 	private LayerMask layerMirror = (1 << 8);
-	private LayerMask layerIgnore = ~((1 << 8) | (1 << 9) | (1 << 10) | (1 << 11));
+	private LayerMask layerIgnore = ~((1 << 9) | (1 << 10) | (1 << 11));
 	
 	private Vector2 mouseDirection;
 	private LineRenderer line;
@@ -43,34 +43,24 @@ public class Line : MonoBehaviour
 			mouseDirection = Camera.main.ScreenToWorldPoint( Input.mousePosition) - transform.position;
 			mouseDirection.Normalize();
 
-			RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDirection, Mathf.Infinity, layerMirror);
-			if(hit.collider)
+			RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDirection, Mathf.Infinity, layerIgnore);
+		//	RaycastHit2D mirrorHit = Physics2D.Raycast(transform.position, mouseDirection, Mathf.Infinity, layerMirror);
+			
+			if(hit.collider.tag != "Mirror")
 			{
-				linePosList[1] = hit.point;
-				hit.transform.GetComponent<Mirror>().SendLine(hit.point, hit.normal, mouseDirection, 2);
-
-				           /*
-				(linePosList.Count == 2)
-				{
-					linePosList.Add(hit.transform.GetComponent<Mirror>().SendLine(hit.point, hit.normal, mouseDirection, 0));
-				}
-				else
-				linePosList[2] = hit.transform.GetComponent<Mirror>().SendLine(hit.point, hit.normal, mouseDirection, 0);
-*/
-			//	Debug.Log ("hitMirror");
+				linePosList.Clear();
+				linePosList.Add(transform.position);
+				linePosList.Add(hit.point);
+				//		Debug.Log ("hitElse");			
 			}
 			else
 			{
-				hit = Physics2D.Raycast(transform.position, mouseDirection, Mathf.Infinity, layerIgnore);
 				if(hit.collider)
 				{
-					linePosList.Clear();
-					linePosList.Add(transform.position);
-					linePosList.Add(hit.point);
-			//		Debug.Log ("hitElse");
+					linePosList[1] = hit.point;
+					hit.transform.GetComponent<Mirror>().SendLine(hit.point, hit.normal, mouseDirection, 2);
 				}	
 			}		
-			//Debug.Log (mouseDirection);
 		}
 		else
 		{

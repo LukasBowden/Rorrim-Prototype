@@ -12,47 +12,48 @@ public class Rotator : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		//setup the size of the graphic and hitbox
 		transform.localScale = new Vector3(transform.parent.transform.localScale.y/transform.parent.transform.localScale.x, 1, 1);//new Vector3(transform.parent.transform.localScale.y, transform.parent.transform.localScale.y, 0);
 	}
 
 	void OnMouseOver()
 	{
-		clickable = true;
-		Debug.Log("Rotator Mouse Over");
-	}
-
-	void OnMouseDrag()
-	{
-		if(!clickable) return;
-		if (Input.GetMouseButtonDown (0))
-		{
-			deltaRotation = 0f;
-			previousRotation = angleBetweenPoints( transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-		}
-		else if(Input.GetMouseButton(0))
-		{
-			currentRotation = angleBetweenPoints( transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition) );
-			deltaRotation = Mathf.DeltaAngle( currentRotation, previousRotation );
-			previousRotation = currentRotation;
-			transform.parent.transform.Rotate( Vector3.back, deltaRotation );
-		}
+		if(Input.GetMouseButtonDown(0))
+			clickable = true;
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
-
+		if(clickable)
+		{
+			if (Input.GetMouseButtonDown (0) && Input.GetKey(KeyCode.LeftShift))
+			{
+				deltaRotation = 0f;
+				previousRotation = angleBetweenPoints( transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+			}
+			else if(Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftShift))
+			{
+				currentRotation = angleBetweenPoints( transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition) );
+				deltaRotation = Mathf.DeltaAngle( currentRotation, previousRotation );
+				previousRotation = currentRotation;
+				transform.parent.transform.Rotate( Vector3.back, deltaRotation );
+			}
+		}
+		if (Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.LeftShift))
+		{
+			clickable = false;
+		}
 	}
 
 	float angleBetweenPoints( Vector2 position1, Vector2 position2 )
 	{
-		var fromLine = position2 - position1;
-		var toLine = new Vector2( 1, 0 );
+		Vector2 fromLine = position2 - position1;
+		Vector2 toLine = new Vector2( 1, 0 );
 		
-		var angle = Vector2.Angle( fromLine, toLine );
-		var cross = Vector3.Cross( fromLine, toLine );
-		
-		// did we wrap around?
+		float angle = Vector2.Angle( fromLine, toLine );
+		Vector3 cross = Vector3.Cross( fromLine, toLine );
+
 		if( cross.z > 0 )
 			angle = 360f - angle;
 		
