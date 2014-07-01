@@ -50,6 +50,7 @@ public class Mirror : MonoBehaviour
 		else
 		{
 			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().enableTeleport();
+			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().setTeleportPos(hit.point.x + hit.normal.x/6, hit.point.y + hit.normal.y/3);
 			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index, hit.point);
 			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().clearElse(index);
 		}

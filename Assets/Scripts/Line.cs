@@ -12,6 +12,8 @@ public class Line : MonoBehaviour
 	private LineRenderer line;
 
 	private bool canTeleport = true;
+	private Vector2 teleportPos;
+
 
 	List<Vector3> linePosList = new List<Vector3>();
 
@@ -58,7 +60,8 @@ public class Line : MonoBehaviour
 				linePosList.Clear();
 				linePosList.Add(transform.position);
 				linePosList.Add(hit.point);
-				//		Debug.Log ("hitElse");
+				setTeleportPos(hit.point.x + hit.normal.x/6, hit.point.y + hit.normal.y/3);
+				Debug.Log (hit.normal);
 				if(hit.collider.tag == "NoTeleport")
 				{
 					blockTeleport();
@@ -101,7 +104,7 @@ public class Line : MonoBehaviour
 		{
 			if(Input.GetMouseButtonDown(1))
 			{
-				transform.parent.position = new Vector2( linePosList[linePosList.Count - 1].x, linePosList[linePosList.Count - 1].y );
+				transform.parent.position = teleportPos;
 			}
 		}
 	}
@@ -113,5 +116,10 @@ public class Line : MonoBehaviour
 	public void enableTeleport()
 	{
 		canTeleport = true;
+	}
+	public void setTeleportPos(float TeleportPosX, float TeleportPosY)
+	{
+		teleportPos.x = TeleportPosX;
+		teleportPos.y = TeleportPosY;
 	}
 }
