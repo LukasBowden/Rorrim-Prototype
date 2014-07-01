@@ -11,6 +11,8 @@ public class Line : MonoBehaviour
 	private Vector2 mouseDirection;
 	private LineRenderer line;
 
+	private bool canTeleport = true;
+
 	List<Vector3> linePosList = new List<Vector3>();
 
 	// Use this for initialization
@@ -24,7 +26,10 @@ public class Line : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		Teleport ();
+		if(canTeleport)
+		{
+			Teleport ();
+		}
 		CastLine ();
 	}
 
@@ -49,19 +54,22 @@ public class Line : MonoBehaviour
 			
 			if(hit.collider.tag != "Mirror")
 			{
+				enableTeleport();
 				linePosList.Clear();
 				linePosList.Add(transform.position);
 				linePosList.Add(hit.point);
-				//		Debug.Log ("hitElse");			
+				//		Debug.Log ("hitElse");
+				if(hit.collider.tag == "NoTeleport")
+				{
+					blockTeleport();
+				}
 			}
 			else
-			{
-				if(hit.collider)
-				{
-					linePosList[1] = hit.point;
-					hit.transform.GetComponent<Mirror>().SendLine(hit.point, hit.normal, mouseDirection, 2);
-				}	
-			}		
+			{		
+				enableTeleport();
+				linePosList[1] = hit.point;
+				hit.transform.GetComponent<Mirror>().SendLine(hit.point, hit.normal, mouseDirection, 2);
+			}
 		}
 		else
 		{
@@ -94,9 +102,16 @@ public class Line : MonoBehaviour
 			if(Input.GetMouseButtonDown(1))
 			{
 				transform.parent.position = new Vector2( linePosList[linePosList.Count - 1].x, linePosList[linePosList.Count - 1].y );
-
-
 			}
 		}
+	}
+
+	public void blockTeleport()
+	{
+		canTeleport = false;
+	}
+	public void enableTeleport()
+	{
+		canTeleport = true;
 	}
 }
