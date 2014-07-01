@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 	private bool rightWall = false;
 	private float boundingWidth = 0.32f;
 	private float boundingHeight = 0.64f;
-	private LayerMask layerGround = ~((1 << 9));
+	private LayerMask layerGround = ~((1 << 9) | (1 << 10) | (1 << 11));
 	// Use this for initialization
 	void Start () 
 	{

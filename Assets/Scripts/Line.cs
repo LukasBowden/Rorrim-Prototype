@@ -61,7 +61,6 @@ public class Line : MonoBehaviour
 				linePosList.Add(transform.position);
 				linePosList.Add(hit.point);
 				setTeleportPos(hit.point.x + hit.normal.x/6, hit.point.y + hit.normal.y/3);
-				Debug.Log (hit.normal);
 				if(hit.collider.tag == "NoTeleport")
 				{
 					blockTeleport();
