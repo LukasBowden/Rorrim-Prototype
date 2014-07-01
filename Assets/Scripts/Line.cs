@@ -60,7 +60,7 @@ public class Line : MonoBehaviour
 				linePosList.Clear();
 				linePosList.Add(transform.position);
 				linePosList.Add(hit.point);
-				setTeleportPos(hit.point.x + hit.normal.x/6, hit.point.y + hit.normal.y/3);
+				setTeleportPos(hit.point.x + hit.normal.x/5.8f, hit.point.y + hit.normal.y/3);
 				if(hit.collider.tag == "NoTeleport")
 				{
 					blockTeleport();
