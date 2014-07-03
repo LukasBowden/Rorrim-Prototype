@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Mirror : MonoBehaviour 
 {
-	private LayerMask layerMirror = (1 << 8);
-	private LayerMask layerIgnore = ~((1 << 9) | (1 << 10) | (1 << 11));
+	private LayerMask layerIgnore = ~((1 << 9) | (1 << 10) | (1 << 11) | (1 << 12));
 	private Vector3 dir;
+	private Vector3 hitPoint;	
 	private RaycastHit2D hit;
 //	private normRot;
 
@@ -34,27 +34,42 @@ public class Mirror : MonoBehaviour
 		 */
 		dir = incidentLine - ((2 * hitNormal) * (Vector3.Dot(hitNormal, incidentLine)));
 		hit = Physics2D.Raycast(hitPoint + dir * 0.01f, dir, Mathf.Infinity, layerIgnore);
+
+		hitPoint.x = hit.point.x;
+		hitPoint.y = hit.point.y;
+		hitPoint.z = 1;
+
 		if(hit.collider.tag == "Mirror")
 		{
 			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().enableTeleport();
-			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index, hit.point);			
-			if(index < 4320)
-			{
-				hit.transform.GetComponent<Mirror>().SendLine(hit.point, hit.normal, dir, index + 1);
+			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index, hitPoint);			
+			if(index < 500)
+			{			
+				hit.transform.GetComponent<Mirror>().SendLine((hitPoint), hit.normal, dir, index + 1);
+				GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().setTeleportPos(hitPoint.x + hit.normal.x/6, hitPoint.y + hit.normal.y/3);				
 			}
 		}
 		else if(hit.collider.tag == "NoTeleport")
 		{
 			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().blockTeleport();
-			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().setTeleportPos(hit.point.x + hit.normal.x/6, hit.point.y + hit.normal.y/3);
-			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index, hit.point);
+			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().setTeleportPos(hitPoint.x + hit.normal.x/6, hitPoint.y + hit.normal.y/3);
+			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index, hitPoint);
 			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().clearElse(index);
+		}
+		else if(hit.collider.tag == "Activator")
+		{
+			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().blockTeleport();
+			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().setTeleportPos(hitPoint.x + hit.normal.x/6, hitPoint.y + hit.normal.y/3);
+			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index, hitPoint);
+			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().clearElse(index);
+
+			hit.collider.GetComponent<Activator>().AddColor(GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().curColor);
 		}
 		else
 		{
 			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().enableTeleport();
-			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().setTeleportPos(hit.point.x + hit.normal.x/6, hit.point.y + hit.normal.y/3);
-			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index, hit.point);
+			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().setTeleportPos(hitPoint.x + hit.normal.x/6, hitPoint.y + hit.normal.y/3);
+			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index, hitPoint);
 			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().clearElse(index);
 		}
 	}
