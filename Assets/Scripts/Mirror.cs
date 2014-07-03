@@ -42,11 +42,10 @@ public class Mirror : MonoBehaviour
 		if(hit.collider.tag == "Mirror")
 		{
 			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().enableTeleport();
-			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index,  new Vector3 (hitPoint.x + dir.x * 0.01f, hitPoint.y + dir.y * 0.01f, 1));
-			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index + 1, hitPoint);
-			if(index < 30)
+			GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().updateList(index, hitPoint);			
+			if(index < 500)
 			{			
-				hit.transform.GetComponent<Mirror>().SendLine((hitPoint), hit.normal, dir, index + 2);
+				hit.transform.GetComponent<Mirror>().SendLine((hitPoint), hit.normal, dir, index + 1);
 				GameObject.FindGameObjectWithTag("Line").GetComponent<Line>().setTeleportPos(hitPoint.x + hit.normal.x/6, hitPoint.y + hit.normal.y/3);				
 			}
 		}

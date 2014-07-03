@@ -13,27 +13,33 @@ public class Activator : MonoBehaviour
 
 	private Color curColor;
 	private Color lockedColor;
-	private Color lerpFrom;
-
+	// Use this for initialization
 	void Start ()
 	{
 		activatorRenderer = gameObject.GetComponent<SpriteRenderer> ();
+		activatorRenderer.color = Color.blue;
 		lockedColor = activatorRenderer.color;
-	}	
-
+	}
+	
+	// Update is called once per frame
 	void Update ()
 	{
 		curColor = activatorRenderer.color;	
-
+		if (!locked && !adding)
+		{
+		}		
 		if(adding)
 		{
 			curTimeDecharging = 0;
-			curTimeCharging += Time.deltaTime * 0.5f;
+			curTimeCharging += Time.deltaTime * 0.05f;
+		}
+		if(curTimeCharging > 0 && !adding)
+		{
+			curTimeCharging -= Time.deltaTime * 0.5f;
 		}
 		if(!adding)
 		{			
-			curTimeCharging = 0;
-			curTimeDecharging += Time.deltaTime * 0.2f;
+			curTimeDecharging += Time.deltaTime * 0.5f;
 			activatorRenderer.color = Color.Lerp (curColor, lockedColor, curTimeDecharging);
 		}
 		adding = false;
@@ -41,18 +47,15 @@ public class Activator : MonoBehaviour
 
 	public void AddColor(Color beamColor)
 	{
-		if(!adding)
-		{
-			lerpFrom = activatorRenderer.color;
-		}
 		adding = true;
+	//	curColor = activatorRenderer.color;	
 		if(Input.GetAxisRaw("Mouse ScrollWheel") != 0)
 		{
 			curTimeCharging = 0;
 			curColor = activatorRenderer.color;	
 		}
-		activatorRenderer.color = Color.Lerp(lerpFrom, beamColor, curTimeCharging);	
-		if(lerpFrom == beamColor)
+		activatorRenderer.color = Color.Lerp(curColor, beamColor, curTimeCharging);	
+		if(curColor == beamColor)
 		{
 			Debug.Log("lock");
 			locked = true;
