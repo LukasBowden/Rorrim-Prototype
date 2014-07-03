@@ -28,6 +28,7 @@ public class Line : MonoBehaviour
 		line = GetComponent<LineRenderer> ();
 		linePosList.Add(transform.position);
 		linePosList.Add(transform.position);
+		linePosList.Add(transform.position);
 	}
 	
 	// Update is called once per frame
@@ -109,7 +110,8 @@ public class Line : MonoBehaviour
 			{		
 				enableTeleport();
 				linePosList[1] = new Vector3(hit.point.x, hit.point.y, 1);
-				hit.transform.GetComponent<Mirror>().SendLine(hit.point, hit.normal, mouseDirection, 2);
+				updateList(2, new Vector3 (hit.point.x + mouseDirection.x * 0.01f, hit.point.y + mouseDirection.y * 0.01f, 1));
+				hit.transform.GetComponent<Mirror>().SendLine(hit.point, hit.normal, mouseDirection, 3);
 			}
 			pos.x = transform.parent.transform.position.x;
 			pos.y = transform.parent.transform.position.y;
@@ -118,6 +120,7 @@ public class Line : MonoBehaviour
 		else
 		{
 			linePosList.Clear();
+			linePosList.Add(pos);
 			linePosList.Add(pos);
 			linePosList.Add(pos);
 		}
